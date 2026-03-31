@@ -299,6 +299,8 @@ class ScannerGUI(tk.Tk):
                 msg_type, a, b = self.scanner.result_queue.get_nowait()
                 if msg_type == 'open':
                     port, service = a, b
+            #------------replaced append with text because it doesn't support colour tags----------------
+            #---------------------- added my code here-------------
                     self.txt_results.insert(tk.END, f"[+] Port {port} ({service}) is open\n", "open")
                     self.txt_results.tag_config("open", foreground="green", font=("Arial", 10, "bold"))
                     self.txt_results.see(tk.END)
@@ -308,8 +310,12 @@ class ScannerGUI(tk.Tk):
                     self.var_status.set(f"Scanning... {scanned}/{total}")
                 elif msg_type == 'done':
                     total_open = len(self.scanner.open_ports)
+    #---------- added code to display closed ports as well ----------------------
+                    total_ports = self.scanner.total_ports
+                    closed_ports = total_ports - total_open
                     self.append_text("\nScan complete.\n")
                     self.append_text(f"Open ports found: {total_open}\n")
+                    self.append_text(f"Closed ports: {closed_ports}\n") # closed port displayed 
                     self.var_status.set("Completed")
                     self.btn_start.configure(state="normal")
                     self.btn_stop.configure(state="disabled")
@@ -343,3 +349,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+#   scanme.nmap.org 
