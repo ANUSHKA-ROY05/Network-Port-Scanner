@@ -299,7 +299,9 @@ class ScannerGUI(tk.Tk):
                 msg_type, a, b = self.scanner.result_queue.get_nowait()
                 if msg_type == 'open':
                     port, service = a, b
-                    self.append_text(f"[+] Port {port} ({service}) is open\n")
+                    self.txt_results.insert(tk.END, f"[+] Port {port} ({service}) is open\n", "open")
+                    self.txt_results.tag_config("open", foreground="green", font=("Arial", 10, "bold"))
+                    self.txt_results.see(tk.END)
                 elif msg_type == 'progress':
                     scanned, total = a, b
                     self.progress.configure(maximum=max(total, 1), value=scanned)
